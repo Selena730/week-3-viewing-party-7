@@ -12,6 +12,7 @@ class UsersController <ApplicationController
 
     if user.password == user.password_confirmation
       if user.save
+        session[:user_id] = user.id
         redirect_to user_path(user)
       else
         flash[:error] = user.errors.full_messages.to_sentence
@@ -27,16 +28,6 @@ class UsersController <ApplicationController
   def login_form
   end
 
-  def login_user
-    user = User.find_by(email: params[:email])
-
-    if user&.authenticate(params[:password])
-      redirect_to user_path(user)
-    else
-      flash.now[:alert] = "Invalid email or password"
-      render :login_form
-    end
-  end
 
   private 
 
